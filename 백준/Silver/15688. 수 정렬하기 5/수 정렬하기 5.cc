@@ -1,70 +1,48 @@
 #include <iostream>
-#include <queue>
+#include <algorithm>
 using namespace std;
-
 int n;
-int arr[1000002];
-int tmp[1000002];
-void merge(int st, int en) {
-	int mid = (st + en) / 2;
-
-	int idx_l = st;
-	int idx_r = mid;
-	int idx_t = st;
-
-	while (idx_l < mid && idx_r < en) {
-		if (arr[idx_l] < arr[idx_r]) {
-			tmp[idx_t] = arr[idx_l];
-			idx_l++;
-			idx_t++;
-		}
-		else if (arr[idx_l] >= arr[idx_r]) {
-			tmp[idx_t] = arr[idx_r];
-			idx_r++;
-			idx_t++;
-		}
-	}
-	while (idx_l < mid) {
-		tmp[idx_t] = arr[idx_l];
-		idx_t++;
-		idx_l++;
-	}
-	while (idx_r < en) {
-		tmp[idx_t] = arr[idx_r];
-		idx_t++;
-		idx_r++;
-	}
-	for (int i = st; i < en; i++) {
-		arr[i] = tmp[i];
-	}
-}
-//priority_queue<int, vector<int>, greater<int>> pq;
-void merge_sort(int st, int en) {
-	if (en == st + 1) {
-		return;
-	}
-	int mid = (st + en) / 2;
-	merge_sort(st, mid);
-	merge_sort(mid, en);
-	merge(st, en);
-}
+int freq1[1000002]; //양수 빈도 
+int freq2[1000002]; //음수 빈도, 음수는 큰 것 부터
+//counting sort
 int main() {
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cin >> n;
+	int cnt1 = 0;
+	int cnt2 = 0; //양수, 음수 횟수
 	for (int i = 0; i < n; i++) {
-		cin >> arr[i];
+		int num;
+		cin >> num;
+		if (num >= 0) {
+			cnt1++;
+			freq1[num]++;
+		}
+		else {
+			cnt2++;
+			freq2[abs(num)]++;
+		}
+
 	}
-	/*for (int i = 0; i < n; i++) {
-		cin >> arr[i];
-		pq.push(arr[i]);
+	int i = 1000001;
+	while (cnt2>0) {
+		if (freq2[i] > 0) {
+			for (int j = 0; j < freq2[i]; j++) {
+				cout << -i << "\n";
+				cnt2--;
+			}
+		}
+		i--;
 	}
-	while (!pq.empty()) {
-		cout<<pq.top()<<"\n";
-		pq.pop();
-	}*/
-	merge_sort(0, n);
-	for (int i = 0; i < n; i++) {
-		cout << arr[i] << "\n";
+	i = 0;
+	//음수 먼저 출력
+	while (cnt1>0) {
+		if (freq1[i] > 0) {
+			for (int j = 0; j < freq1[i]; j++) {
+				cout << i << "\n";
+				cnt1--;
+			}
+		}
+		i++;
 	}
 }
