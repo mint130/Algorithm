@@ -1,37 +1,28 @@
 #include <iostream>
-#include <stack>
-#include <cmath>
-#include <algorithm>
-#include <vector>
 using namespace std;
-
-#define MAX 9
 int n, m;
 
-int arr[MAX] = {0};
-bool visited[MAX] = {0};
-void dfs(int num)
-{
-	if (num == m)
-	{
-		for (int i = 0; i < m; i++)
-		{
+int arr[10];
+
+void func(int k) {
+	//num은 수열에 마지막으로 들어간 수
+	if (k == m) {
+		for (int i = 0; i < m; i++) {
 			cout << arr[i] << " ";
 		}
 		cout << "\n";
 		return;
 	}
-	for (int i = 1; i <= n; i++)
-	{
-		arr[num] = i;
-		dfs(num + 1);
+
+	for (int i = 1; i <= n; i++) {
+		arr[k] = i;
+		func(k + 1);		
 	}
-
 }
-int main()
-{
-
+int main() {
+	ios::sync_with_stdio(0);
+	cin.tie(0);
 	cin >> n >> m;
-	dfs(0);
-	
+	func(0);
+	//k개가 채워진 수열
 }
