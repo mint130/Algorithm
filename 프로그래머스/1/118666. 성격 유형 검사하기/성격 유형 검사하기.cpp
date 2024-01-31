@@ -13,40 +13,14 @@ string solution(vector<string> survey, vector<int> choices) {
     for(int i=0;i<size;i++){
         char c1=survey[i][0];
         char c2=survey[i][1];
-        bool reverse=0;
-        //an cf mj rt na 
-        if(c1>c2){
-            char tmp;
-            tmp=c1;
-            c1=c2;
-            c2=tmp;
-            reverse=1;
-        }
-       
-        //c1이 사전 순으로 앞에 옴
-        int score=choices[i]-1;
         
-        if(!reverse){
-            //사전 순
-            if(score<3){
-                cout<<c1<<" "<<3-score<<endl;
-                m[c1]+=3-score;
-            }
-            else {
-                cout<<c2<<" "<<score-3<<endl;
-                m[c2]+=score-3;
-            }
+        int score=choices[i];
+        
+        if(score>=4){
+            m[c2]+=score-4;
         }
         else {
-            //역 사전 순
-            if(score<3){
-                cout<<c2<<" "<<3-score<<endl;
-                m[c2]+=3-score;
-            }
-            else {
-                cout<<c1<<" "<<score-3<<endl;
-                m[c1]+=score-3;
-            }
+            m[c1]+=4-score;
         }
         
     }
