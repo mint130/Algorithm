@@ -15,7 +15,6 @@ int solution(int n, vector<vector<int>> computers) {
             if(i==j) continue;
             if(computers[i][j]){
                 node[i].push_back(j);
-                //node[j].push_back(i);
             }
         }
     }
@@ -29,7 +28,6 @@ int solution(int n, vector<vector<int>> computers) {
             while(!q.empty()){
                 int cur=q.front();
                 q.pop();
-
                 for(auto nxt:node[cur]){
                     if(!visited[nxt]){  
                         q.push(nxt);
@@ -39,9 +37,7 @@ int solution(int n, vector<vector<int>> computers) {
             }
             
         }
-        //for(auto j:node[i]){
-        //    cout<<i<<" "<<j<<endl;
-        //}
+
     }
     
     
