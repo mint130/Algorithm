@@ -14,7 +14,7 @@ int solution(int n, vector<vector<int>> edge) {
         int st=edge[i][0];
         int en=edge[i][1];
         adj[st].push_back(en);
-        adj[en].push_back(st); //이거 있어도 되는건가
+        adj[en].push_back(st); 
     }
     memset(dist, -1, sizeof(dist));
  
