@@ -28,23 +28,10 @@ long long solution(vector<int> sequence) {
     prefix1[0]=seq1[0];
     prefix2[0]=seq2[0];
     for(int i=1;i<n;i++){
-        if(prefix1[i-1]+seq1[i]>seq1[i]){
-            //i-1까지의 누적합에서 현재 숫자를 더한게 현재 숫자보다 크다면 증가중
-            prefix1[i]=prefix1[i-1]+seq1[i];
-        }
-        else {
-            prefix1[i]=seq1[i];
-        }
+        prefix1[i]=max(prefix1[i-1]+(long long)seq1[i], (long long)seq1[i]);
+        prefix2[i]=max(prefix2[i-1]+(long long)seq2[i], (long long)seq2[i]);
     }
-     for(int i=1;i<n;i++){
-        if(prefix2[i-1]+seq2[i]>seq2[i]){
-            //i-1까지의 누적합에서 현재 숫자를 더한게 현재 숫자보다 크다면 증가중
-            prefix2[i]=prefix2[i-1]+seq2[i];
-        }
-        else {
-            prefix2[i]=seq2[i];
-        }
-    }
+    
     
     ans1=*max_element(prefix1, prefix1+n);
     ans2=*max_element(prefix2, prefix2+n);
