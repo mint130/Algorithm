@@ -29,7 +29,7 @@ int solution(int x, int y, int n) {
             q.push(cur*2);
         }
         //cur*3
-        if(cur*3<=y){
+        if(cur*3<=y && dist[cur*3]==-1){
             dist[cur*3]=dist[cur]+1;
             q.push(cur*3);
         }
