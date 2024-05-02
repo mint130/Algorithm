@@ -7,11 +7,9 @@ using namespace std;
 int dist[1000002];
 queue<int> q;
 int solution(int x, int y, int n) {
-    //int answer = -1;
     fill(dist, dist+1000002, -1);
     q.push(x);
     dist[x]=0;
-    bool flag=0;
     while(!q.empty()){
         int cur=q.front();
         q.pop();
