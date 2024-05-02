@@ -7,8 +7,7 @@ bool rstudent[32];
 int solution(int n, vector<int> lost, vector<int> reserve) {
     int answer=0;
     answer=n-lost.size(); //현재 체육복 없는 학생 수
-    sort(lost.begin(), lost.end());
-    sort(reserve.begin(), reserve.end());
+
     for(int i=0;i<lost.size();i++){
         int idx=lost[i];
         lstudent[idx]=1;
