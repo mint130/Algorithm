@@ -10,7 +10,6 @@
 #include <map>
 #include <set>
 using namespace std;
-bool board[101][101]; //board[from][to]가 1이면 이미 있음
 int dist[101];
 int main() {
 	ios::sync_with_stdio(0);
@@ -21,13 +20,11 @@ int main() {
 		cin >> n >> st;
 		int answer = 0;
 		fill(dist, dist + 101, -1); //거리
-		memset(board, 0, sizeof(board));
 		vector<int> adj[101];
 		for (int i = 0; i < n - 1; i = i + 2) {
 			int from;
 			int to;
 			cin >> from >> to;
-			if (board[from][to]) continue; //중복은 넣지 않음
 			adj[from].push_back(to);
 		}
 		queue<int> q;
