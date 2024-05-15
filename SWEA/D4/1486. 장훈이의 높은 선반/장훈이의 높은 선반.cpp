@@ -14,7 +14,7 @@ int b;
 int ans;
 void dfs(int cnt, int height) {
 	
-	if (cnt == n+1) {
+	if (cnt == n) {
 		if (height >= b) {
 			ans = min(ans, height);
 		}
@@ -34,10 +34,9 @@ int main() {
 		//선반 높이 b
 		fill(h, h + 21, 0);
 		ans = 987654321;
-		for (int i = 1; i <= n; i++) {
+		for (int i = 0; i < n; i++) {
 			cin >> h[i];
 		}
-		int st, en = 0;
 		dfs(0, 0);
 		cout << "#" << tc << " " << ans-b << "\n";
 	}
