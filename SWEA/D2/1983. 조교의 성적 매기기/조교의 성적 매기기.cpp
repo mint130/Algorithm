@@ -34,17 +34,12 @@ int main() {
 		}
 		sort(v.begin(), v.end(), cmp);
 
-		int idx = 0;
-		for (int i = 0; i < v.size(); i = i + cnt) {
-			for (int j = 0; j < cnt; j++) {
-				string s = grade[idx];
-				if (v[j + i].second == k) {
-					answer = s;
-				}
+		for (int i = 0; i < v.size(); i++) {
+			if (k == v[i].second)
+			{
+				cout << "#" << tc << " " << grade[i*10/n] << "\n";
 			}
-			idx++;
-
 		}
-		cout << "#" << tc << " " << answer << "\n";
+		
 	}
 }
