@@ -13,13 +13,9 @@ void dfs(string str, int cnt){
     }
     for(int i=0;i<5;i++){
         dfs(str+w[i], cnt+1);
-    }
-    
+    }    
 }
 int solution(string word) {
-    for(int i=0;i<5;i++){
-        dfs(w[i], 1);
-    }
-    return find(s.begin(), s.end(), word)-s.begin()+1;
-    
+    dfs("", 0);
+    return find(s.begin(), s.end(), word)-s.begin();
 }
