@@ -3,10 +3,8 @@
 #include <iostream>
 
 using namespace std;
-int arr[2]={1,2};
-int dp[2002];
-long long answer = 0;
 
+int dp[2002];
 long long solution(int n) {
     dp[1]=1;
     dp[2]=2;
