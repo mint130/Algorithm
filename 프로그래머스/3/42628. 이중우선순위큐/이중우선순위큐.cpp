@@ -1,54 +1,43 @@
 #include <string>
-#include <vector>
-#include <queue>
 #include <algorithm>
+#include <set>
+#include <vector>
 #include <iostream>
 using namespace std;
-deque<int> dq;
+multiset<int> ms;
 vector<int> solution(vector<string> operations) {
     vector<int> answer(2);
     for(int i=0;i<operations.size();i++){
         string s=operations[i];
         if(s[0]=='I'){
-            //s[2]부터 마지막까지
-            string num="";
+            string str="";
             for(int j=2;j<s.length();j++){
-                num+=s[j];
+                str+=s[j];
             }
-            dq.push_back(stoi(num));
-            sort(dq.begin(), dq.end());
-            
-        }
-        
-        if(s[0]=='D'){
-            
-            if(s[2]=='-'){
-                //최소값 삭제
-                if(!dq.empty()){
-                    dq.pop_front();
-                }
-            }
-            else {
-                //최대값 삭제
-                if(!dq.empty()){
-                    dq.pop_back();
-                }
-                
-            }
-        }
-    }
-    if(dq.empty()){
-        answer[0]=0; answer[1]=0;
-    }
-    else{
-        if(dq.size()==1){
-            answer[0]=dq[0];
-            answer[1]=answer[0];
+            ms.insert(stoi(str));
         }
         else {
-            answer[1]=dq[0];
-            answer[0]=dq[dq.size()-1];
+            if(s[2]=='-'){
+                //최소값 삭제
+                if(!ms.empty()){
+                    ms.erase(ms.begin());
+                }
+            }
+            else{
+                //최대값 삭제
+                if(!ms.empty()){
+                    ms.erase(--ms.end());
+                }
+            }
         }
+    }
+    if(ms.empty()){
+        answer[0]=0;
+        answer[1]=0;
+    }
+    else{
+        answer[1]=*ms.begin();
+        answer[0]=*(--ms.end());
     }
     return answer;
 }
