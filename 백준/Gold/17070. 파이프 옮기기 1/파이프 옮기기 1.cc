@@ -22,18 +22,14 @@ int main() {
 			if (board[i][j]) continue; //벽
 			if (j + 1 < n && !board[i][j + 1]) {
 				//가로가 비어있음
-				dp[i][j + 1][0] += dp[i][j][0];
-				dp[i][j + 1][0] += dp[i][j][2];
+				dp[i][j + 1][0] = dp[i][j][0] + dp[i][j][2];
 			}
 			if (i + 1 < n && !board[i + 1][j]) {
 				//세로가 비어있음
-				dp[i + 1][j][1] += dp[i][j][1];
-				dp[i + 1][j][1] += dp[i][j][2];
+				dp[i + 1][j][1] = dp[i][j][1] + dp[i][j][2];
 			}
 			if (i + 1 < n && j + 1 < n && !board[i + 1][j + 1] && !board[i + 1][j] && !board[i][j + 1]) {
-				dp[i + 1][j + 1][2] += dp[i][j][0];
-				dp[i + 1][j + 1][2] += dp[i][j][1];
-				dp[i + 1][j + 1][2] += dp[i][j][2];
+				dp[i + 1][j + 1][2] = dp[i][j][0] + dp[i][j][1] + dp[i][j][2];
 			}
 
 			
