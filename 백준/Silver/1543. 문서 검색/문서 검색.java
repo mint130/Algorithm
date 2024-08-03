@@ -8,11 +8,10 @@ public class Main {
 		BufferedReader br= new BufferedReader(new InputStreamReader(System.in));
 		String s= br.readLine(); //입력 받은 문자열
 		String f = br.readLine();
+		s=s.replaceAll(f, "1");
 		int cnt = 0;
-		int find = s.indexOf(f); //f가 가장 먼저 나온 위치 반환
-		while(find != -1) {
-			cnt++;
-			find = s.indexOf(f, find + f.length());
+		for(int i =0;i<s.length();i++) {
+			if(s.charAt(i)=='1') cnt++;
 		}
 		System.out.println(cnt);
 	}
