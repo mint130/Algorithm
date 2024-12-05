@@ -7,16 +7,44 @@ using namespace std;
 int n, m, r; //지역 갯수, 수색 범위, 길의 갯수 
 int ans = 0;
 int item[101];
-int dp[101][101];
+vector<pair<int, int>> v[101];
 const int INF = 987654321;
-int main () {
-    cin>>n>>m>>r;
-    //가장 처음 거리 배열 초기화 
+
+int dijkstra(int st){
+    //dist는 st에서부터의 최단 거리 저장
+    int dist[101];
+    fill(dist, dist+n+1, INF);
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    
+    //시작점
+    pq.push({0, st});
+    dist[st]=0;
+
+    while(!pq.empty()){
+        int cur = pq.top().second;
+        int cost = pq.top().first;
+        pq.pop();
+        if(cost>dist[cur]) continue; //dist[cur]보다 현재 거리가 더 길다 -> 이미 처리됨 
+        for(auto nxt: v[cur]){
+            if(cost+nxt.first<dist[nxt.second]){
+                dist[nxt.second]=cost+nxt.first;
+                pq.push({dist[nxt.second], nxt.second});
+            }
+        }
+
+    }
+    int sum=0;
     for(int i=1;i<=n;i++){
-        for(int j=1;j<=n;j++){
-            dp[i][j]=INF;
+        if(dist[i]<=m){
+            sum+=item[i];
         }
     }
+    return sum;
+}
+
+int main () {
+    cin>>n>>m>>r;
+   
     //아이템
     for(int i=1;i<=n;i++){
         int t;
@@ -27,31 +55,13 @@ int main () {
     for(int i=0;i<r;i++){
         int a, b, l;
         cin>>a>>b>>l;
-        dp[a][b]=min(dp[a][b], l);
-        dp[b][a]=min(dp[b][a], l);
+        v[a].push_back({l, b});
+        v[b].push_back({l, a});
     }
 
     for(int i=1;i<=n;i++){
-        dp[i][i]=0; //자기자신 
+        ans=max(ans, dijkstra(i));
     }
 
-    for(int k=1;k<=n;k++){
-        for(int i=1;i<=n;i++){
-            for(int j=1;j<=n;j++){
-                dp[i][j]=min(dp[i][j], dp[i][k]+dp[k][j]);
-            }
-        }
-    }
-
-    for(int i=1;i<=n;i++){
-        int sum = 0;
-        for(int j=1;j<=n;j++){
-            //i부터 시작, j에 도착 
-            if(dp[i][j]<=m){
-                sum+=item[j];
-            }
-        }
-        ans=max(sum, ans);
-    }
     cout<<ans;
 }
