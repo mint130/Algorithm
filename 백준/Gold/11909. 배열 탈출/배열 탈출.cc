@@ -9,6 +9,8 @@ int board[2223][2223];
 int dp[2223][2223]; // board[i][j]까지 왔을 때 최소비용
 int main()
 {
+    cin.tie(0);
+    ios::sync_with_stdio(0);
     cin >> n;
     for (int i = 0; i < n; i++)
     {
