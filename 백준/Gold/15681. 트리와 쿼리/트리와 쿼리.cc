@@ -8,7 +8,7 @@ int n, r, q;
 int cnt[100002]; // 루트번호가 n일때 서브트리 정점의 수
 bool visited[100002];
 vector<int> v[100002];
-int dfs(int cur)
+void dfs(int cur)
 {
     cnt[cur] = 1;
     visited[cur] = 1;
@@ -16,9 +16,9 @@ int dfs(int cur)
     {
         if (visited[nxt])
             continue;
-        cnt[cur] += dfs(nxt);
+        dfs(nxt);
+        cnt[cur] += cnt[nxt];
     }
-    return cnt[cur];
 }
 int main()
 {
@@ -34,8 +34,7 @@ int main()
         v[st].push_back(en);
         v[en].push_back(st);
     }
-    cnt[r] = dfs(r);
-
+    dfs(r);
     for (int i = 0; i < q; i++)
     {
         int num;
