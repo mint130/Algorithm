@@ -1,66 +1,79 @@
 #include <iostream>
-#include <queue>
 #include <algorithm>
+#include <vector>
+#include <queue>
 #include <stack>
-#include <string>
-#include <set>
 using namespace std;
-string dist[10000];	//명령어 저장
-int distnum[10000];
-int n;
+
+int T, A, B;
+int dist[10001];
+string ans[10001];
 int main() {
-	ios::sync_with_stdio(0);
+	// D는 2*n, 결과값이 9999보다 크면 10000
+	// S는 n-1, n이 0이면 9999 저장
+	// L은 왼편으로(가장 왼쪽이 오른쪽으로 감)
+	// R은 오른편으로(가장 오른쪽이 왼쪽으로)
+
 	cin.tie(0);
-	cin >> n;
-	while (n--) {
-		fill(dist, dist + 10000, ""); //초기화
-		fill(distnum, distnum + 10000, -1);
-		int st, en;
-		cin >> st >> en;
+	ios::sync_with_stdio();
+
+	cin >> T;
+	for (int tc = 1;tc <= T;tc++) {
+		fill(dist, dist + 10001, -1); // 초기화
+		fill(ans, ans + 10001, "");
+		cin >> A >> B;
 
 		queue<int> q;
-		q.push(st);
-		distnum[st] = 0;
-		dist[st] = "";
+		q.push(A);
+		dist[A] = 0;
+		ans[A] = "";
 		while (!q.empty()) {
 			int cur = q.front();
 			q.pop();
-			if (cur == en) {
-				//명령어 출력
-				cout << dist[en] << "\n";
+			if (cur == B) {
+				cout << ans[cur] << "\n";
 				break;
 			}
-			//n*2배
-			int nxt1 = cur * 2;
-			if (nxt1 > 9999) nxt1 %= 10000;
-			if (distnum[nxt1] == -1) {
-				dist[nxt1] = dist[cur] + "D";
-				distnum[nxt1] = distnum[cur] + 1;
-				q.push(nxt1);
+			// D
+			int nxt = cur * 2;
+			if (nxt > 9999) {
+				nxt %= 10000;
 			}
-			//n-1
-			int nxt2 = cur - 1;
-			if (nxt2 < 0) nxt2 = 9999;
-			if (distnum[nxt2] == -1) {
-				dist[nxt2] = dist[cur] + "S";
-				distnum[nxt2] = distnum[cur] + 1;
-				q.push(nxt2);
+			if (dist[nxt] == -1) {
+				dist[nxt] = dist[cur] + 1;
+				ans[nxt] = ans[cur] + "D";
+				q.push(nxt);
 			}
-			//왼쪽
-			int nxt3 = cur * 10 + cur / 1000;
-			if (nxt3 >= 10000) nxt3 %= 10000;
-			if (distnum[nxt3] == -1) {
-				dist[nxt3] = dist[cur] + "L";
-				distnum[nxt3] = distnum[cur] + 1;
-				q.push(nxt3);
+			// S
+			nxt = cur - 1;
+			if (nxt < 0) nxt = 9999;
+			if (dist[nxt] == -1) {
+				dist[nxt] = dist[cur] + 1;
+				ans[nxt] = ans[cur] + "S";
+				q.push(nxt);
 			}
-			//오른쪽
-			int nxt4 = cur % 10 * 1000 + cur / 10;
-			if (distnum[nxt4] == -1) {
-				dist[nxt4] = dist[cur] + "R";
-				distnum[nxt4] = distnum[cur] + 1;
-				q.push(nxt4);
+			// L
+			int first = cur / 1000; // 앞에 한자리
+			int last = cur % 1000; // 뒤에 3자리
+			nxt = last * 10 + first;
+			if (nxt > 9999) {
+				nxt %= 10000;
+			}
+			if (dist[nxt] == -1) {
+				dist[nxt] = dist[cur] + 1;
+				ans[nxt] = ans[cur] + "L";
+				q.push(nxt);
+			}
+			// R
+			last = cur / 10; // 앞에 3자리
+			first = cur % 10; // 뒤에 1자리
+			nxt = first * 1000 + last;
+			if (dist[nxt] == -1) {
+				dist[nxt] = dist[cur] + 1;
+				ans[nxt] = ans[cur] + "R";
+				q.push(nxt);
 			}
 		}
 	}
+	
 }
