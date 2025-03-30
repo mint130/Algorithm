@@ -1,7 +1,7 @@
-SELECT F1.ID, F3.FISH_NAME, F1.LENGTH
-FROM FISH_INFO F1 JOIN (SELECT MAX(LENGTH) MAX_LENGTH, FISH_TYPE
-                        FROM FISH_INFO
-                        GROUP BY FISH_TYPE) F2
-ON F1.LENGTH=F2.MAX_LENGTH AND F1.FISH_TYPE=F2.FISH_TYPE 
-JOIN FISH_NAME_INFO F3
-ON F1.FISH_TYPE=F3.FISH_TYPE
+select f.id, n.fish_name, f.length
+from fish_info f
+join fish_name_info n 
+on f.fish_type = n.fish_type
+where (f.fish_type, f.length) in (select f1.fish_type, max(f1.length)
+                   from fish_info f1
+                   group by f1.fish_type)
