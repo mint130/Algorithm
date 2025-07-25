@@ -4,6 +4,13 @@
 using namespace std;
 int day[13] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 vector<pair<int, int>> v;
+bool compare(pair<int, int> p1, pair<int, int> p2)
+{
+    if (p1.first == p2.first)
+        return p1.second > p2.second;
+    else
+        return p1.first < p2.first;
+}
 int num(int m, int d)
 {
     // m-1까지 일 더함
@@ -32,7 +39,7 @@ int main()
 
         v.push_back({st, en});
     }
-    sort(v.begin(), v.end());
+    sort(v.begin(), v.end(), compare);
 
     int cnt = 0;
     int cur = start; // 꽃이 펴져있다고 보장되는 날짜
