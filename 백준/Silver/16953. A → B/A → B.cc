@@ -1,14 +1,11 @@
 #include <iostream>
+#include <algorithm>
 #include <string>
 #include <queue>
-#include <vector>
-#include <algorithm>
 using namespace std;
 long long a, b;
 
 int main() {
-	//a->b
-	//*2, 1을 수의 가장 오른쪽에 추가
 	cin >> a >> b;
 	queue<pair<long long, int>> q;
 	q.push({ a, 0 });
@@ -20,13 +17,14 @@ int main() {
 			cout << cnt + 1;
 			return 0;
 		}
-		if (cur*2 <= b) {
-			q.push({ cur * 2, cnt + 1 });
+		long long nxt = cur * 2;
+		if (nxt <= b) {
+			q.push({ nxt, cnt+1 });
 		}
-		if (cur * 10 + 1 <= b) {
-			q.push({ cur * 10 + 1, cnt + 1 });
+		nxt = cur * 10 + 1;
+		if (nxt <= b) {
+			q.push({ nxt, cnt + 1 });
 		}
-		
 	}
 	cout << -1;
 }
