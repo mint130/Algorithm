@@ -7,15 +7,14 @@ using namespace std;
 int board[101][101];
 int n;
 int ans = 98765421;
-int cnt = 1;
+int cnt = 1; // 섬의 번호
 int dx[4] = {1, 0, -1, 0};
 int dy[4] = {0, 1, 0, -1};
 int island[101][101]; // 섬을 만드는 dist 배열
 int road[101][101];   // 도로를 만드는 dist 배열
-int out[101][101];    // 외곽 찾는 dist 배열
 int dist[101][101];
 vector<pair<int, int>> v; // 외곽 넣음
-void obfs(int r, int c)
+void obfs(int r, int c)   // 외곽 찾는 bfs
 {
     dist[r][c] = 0;
     queue<pair<int, int>> q;
@@ -42,13 +41,12 @@ void obfs(int r, int c)
             if (board[nx][ny] != 0)
             {
                 // 섬의 외곽
-                out[nx][ny] = 1;
                 v.push_back({nx, ny});
             }
         }
     }
 }
-void ibfs(int r, int c)
+void ibfs(int r, int c) // 섬 구별하는 bfs
 {
     island[r][c] = 0;
     board[r][c] = cnt;
@@ -68,13 +66,14 @@ void ibfs(int r, int c)
             if (board[nx][ny] == 0 || island[nx][ny] != -1)
                 continue;
             island[nx][ny] = island[x][y] + 1;
-            board[nx][ny] = cnt;
+            board[nx][ny] = cnt; // 섬 번호 갱신
             q.push({nx, ny});
         }
     }
 }
 void vbfs(int r, int c, int num)
 {
+    // 외곽에서 다른 외곽으로 향하는 길 중 제일 짧은 길 찾는 bfs
     road[r][c] = 0;
     queue<pair<int, int>> q;
     q.push({r, c});
@@ -97,11 +96,11 @@ void vbfs(int r, int c, int num)
                 continue;
             if (road[nx][ny] != -1)
                 continue;
-            if (board[nx][ny] == 0 || board[nx][ny] != num)
-            {
-                q.push({nx, ny});
-                road[nx][ny] = road[x][y] + 1;
-            }
+            if (board[nx][ny] == num)
+                continue;
+            // 바다거나 자기랑 다른 섬이면
+            q.push({nx, ny});
+            road[nx][ny] = road[x][y] + 1;
         }
     }
 }
@@ -126,7 +125,7 @@ int main()
             {
                 // 섬 만드는 bfs
                 ibfs(i, j);
-                cnt++;
+                cnt++; // 섬 구별하기 위해
             }
             if (board[i][j] == 0 && dist[i][j] == -1)
             {
