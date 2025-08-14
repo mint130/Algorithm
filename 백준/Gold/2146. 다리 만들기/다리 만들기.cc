@@ -14,38 +14,38 @@ int island[101][101]; // 섬을 만드는 dist 배열
 int road[101][101];   // 도로를 만드는 dist 배열
 int dist[101][101];
 vector<pair<int, int>> v; // 외곽 넣음
-void obfs(int r, int c)   // 외곽 찾는 bfs
-{
-    dist[r][c] = 0;
-    queue<pair<int, int>> q;
-    q.push({r, c});
-    while (!q.empty())
-    {
-        int x = q.front().first;
-        int y = q.front().second;
-        q.pop();
-        for (int d = 0; d < 4; d++)
-        {
-            int nx = x + dx[d];
-            int ny = y + dy[d];
-            if (nx < 0 || nx >= n || ny < 0 || ny >= n)
-                continue;
-            if (dist[nx][ny] != -1)
-                continue;
-            if (board[nx][ny] == 0)
-            {
-                // 바다
-                dist[nx][ny] = dist[x][y] + 1;
-                q.push({nx, ny});
-            }
-            if (board[nx][ny] != 0)
-            {
-                // 섬의 외곽
-                v.push_back({nx, ny});
-            }
-        }
-    }
-}
+// void obfs(int r, int c)   // 외곽 찾는 bfs
+// {
+//     dist[r][c] = 0;
+//     queue<pair<int, int>> q;
+//     q.push({r, c});
+//     while (!q.empty())
+//     {
+//         int x = q.front().first;
+//         int y = q.front().second;
+//         q.pop();
+//         for (int d = 0; d < 4; d++)
+//         {
+//             int nx = x + dx[d];
+//             int ny = y + dy[d];
+//             if (nx < 0 || nx >= n || ny < 0 || ny >= n)
+//                 continue;
+//             if (dist[nx][ny] != -1)
+//                 continue;
+//             if (board[nx][ny] == 0)
+//             {
+//                 // 바다
+//                 dist[nx][ny] = dist[x][y] + 1;
+//                 q.push({nx, ny});
+//             }
+//             if (board[nx][ny] != 0)
+//             {
+//                 // 섬의 외곽
+//                 v.push_back({nx, ny});
+//             }
+//         }
+//     }
+// }
 void ibfs(int r, int c) // 섬 구별하는 bfs
 {
     island[r][c] = 0;
@@ -63,11 +63,19 @@ void ibfs(int r, int c) // 섬 구별하는 bfs
             int ny = y + dy[d];
             if (nx < 0 || nx >= n || ny < 0 || ny >= n)
                 continue;
-            if (board[nx][ny] == 0 || island[nx][ny] != -1)
+            if (island[nx][ny] != -1)
                 continue;
-            island[nx][ny] = island[x][y] + 1;
-            board[nx][ny] = cnt; // 섬 번호 갱신
-            q.push({nx, ny});
+            if (board[nx][ny] == 0)
+            {
+                // 외곽
+                v.push_back({x, y});
+            }
+            else
+            {
+                island[nx][ny] = island[x][y] + 1;
+                board[nx][ny] = cnt; // 섬 번호 갱신
+                q.push({nx, ny});
+            }
         }
     }
 }
@@ -127,17 +135,13 @@ int main()
                 ibfs(i, j);
                 cnt++; // 섬 구별하기 위해
             }
-            if (board[i][j] == 0 && dist[i][j] == -1)
-            {
-                // 외곽 찾는 bfs
-                obfs(i, j);
-            }
         }
     }
     for (int i = 0; i < v.size(); i++)
     {
         int x = v[i].first;
         int y = v[i].second;
+
         vbfs(x, y, board[x][y]);
         memset(road, -1, sizeof(road));
     }
