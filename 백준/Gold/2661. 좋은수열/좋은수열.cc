@@ -1,42 +1,32 @@
 #include <iostream>
-
+#include <algorithm>
+#include <string>
 using namespace std;
 int n;
-bool endflag = false;
-int arr[82];
+string ans;
 bool check(string s) {
-
+	// 좋은 수열인지 판단
 	int len = s.length();
-	//뒤에서부터 1부터 len까지 
-	for (int i = 1; i <= (len / 2); i++) {
-		//뒤에서부터 검사
-		if (s.substr(len - i, i) == s.substr(len - 2 * i, i)) {
-			return false;
-		}
+	for (int i = 1; i <= len / 2; i++) {
+		// 뒤에서부터 i만큼
+		string tmp1 = s.substr(len - i, i);
+		// len-i보다 i만큼 더 앞으로
+		string tmp2 = s.substr(len - (2 * i), i);
+		if (tmp1 == tmp2) return false; // 나쁜 수열 포함
 	}
 	return true;
-	
-
 }
-void func(int depth, string s) {
-	if (endflag) return;
+void dfs(int idx, string s) {
 	if (!check(s)) return;
-	if (depth == n) {
+	if (idx == n) {
 		cout << s;
-		endflag = true;
-		return;
+		exit(0); // 가장 첫번쨰만 출력하고 끝
 	}
-	
-	func(depth + 1, s + '1');
-	func(depth + 1, s + '2');
-	func(depth + 1, s + '3');
-	
+	dfs(idx + 1, s + '1');
+	dfs(idx + 1, s + '2');
+	dfs(idx + 1, s + '3');
 }
 int main() {
-	//123으로 만들 수 있는 수열
-	ios::sync_with_stdio(0);
-	cin.tie(0);
 	cin >> n;
-	string ans = "";
-	func(0, ans);
+	dfs(0, "");
 }
