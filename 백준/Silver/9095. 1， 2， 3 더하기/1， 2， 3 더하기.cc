@@ -1,22 +1,17 @@
 #include <iostream>
-
 using namespace std;
-
-int d[12]; //n를 1,2,3의 합으로 나타내는 방법의 수
+int dp[12];
+int n, T;
 int main() {
-	int t;
-	cin >> t;
-	for (int i = 0; i < t; i++) {
-		int n;
+	cin >> T;
+	dp[1] = 1;
+	dp[2] = dp[1] + 1;
+	dp[3] = dp[1] + dp[2] + 1;
+	for (int i = 4; i <= 11; i++) {
+		dp[i] = dp[i - 3] + dp[i - 2] + dp[i - 1];
+	}
+	for (int tc = 0; tc < T; tc++) {
 		cin >> n;
-		d[1] = 1;
-		d[2] = 2; //2, 1+1
-		d[3] = 4; //3. 1+2, 2+1, 1+1+1
-		
-		for (int i = 4; i <= n; i++) {
-			d[i] = d[i - 1] + d[i - 2] + d[i - 3];
-		}
-		//cout << ans;
-		cout << d[n] << "\n";
+		cout << dp[n] << "\n";
 	}
 }
