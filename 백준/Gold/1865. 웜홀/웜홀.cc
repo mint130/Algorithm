@@ -19,11 +19,14 @@ bool bell_ford(int num)
             if (dist[en] > dist[st] + cost)
             {
                 dist[en] = dist[st] + cost;
-                // if(i==n) return true;
+                // n번째에도 감소 된다면 음수 가중치 있는 것
+                if (i == n)
+                    return true;
             }
         }
     }
-    // return false;
+    return false;
+    /*
     for (auto edge : v)
     {
         int cost = edge.first;
@@ -36,6 +39,7 @@ bool bell_ford(int num)
         }
     }
     return false;
+    */
 }
 int main()
 {
