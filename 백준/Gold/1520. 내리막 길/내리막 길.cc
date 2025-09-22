@@ -8,14 +8,15 @@ int board[501][501];
 int dx[4] = {1, 0, -1, 0};
 int dy[4] = {0, 1, 0, -1};
 int dp[501][501];
-int dfs(int x, int y)
+void dfs(int x, int y)
 {
     if (x == n - 1 && y == m - 1)
     {
-        return 1;
+        dp[x][y] = 1;
+        return;
     }
     if (dp[x][y] != -1)
-        return dp[x][y];
+        return;
 
     dp[x][y] = 0;
 
@@ -27,9 +28,9 @@ int dfs(int x, int y)
             continue;
         if (board[nx][ny] >= board[x][y])
             continue; // 내리막길이 아님
-        dp[x][y] += dfs(nx, ny);
+        dfs(nx, ny);
+        dp[x][y] += dp[nx][ny];
     }
-    return dp[x][y];
 }
 int main()
 {
@@ -42,5 +43,7 @@ int main()
             dp[i][j] = -1;
         }
     }
-    cout << dfs(0, 0);
+
+    dfs(0, 0);
+    cout << dp[0][0];
 }
