@@ -8,32 +8,23 @@ string s, t;
 int main()
 {
     cin >> s >> t;
-    vector<char> c;
-    vector<char> ans;
-    for (int i = 0; i < t.length(); i++)
+
+    while (t.size() > s.size())
     {
-        c.push_back(t[i]);
-    }
-    for (int i = 0; i < s.length(); i++)
-    {
-        ans.push_back(s[i]);
-    }
-    while (c.size() != 0)
-    {
-        if (c[c.size() - 1] == 'A')
+        if (t.back() == 'A')
         {
-            c.pop_back();
+            t.pop_back();
         }
-        else if (c[c.size() - 1] == 'B')
+        else
         {
-            c.pop_back();
-            reverse(c.begin(), c.end());
-        }
-        if (ans == c)
-        {
-            cout << 1;
-            return 0;
+            t.pop_back();
+            reverse(t.begin(), t.end());
         }
     }
-    cout << 0;
+    if (t == s)
+    {
+        cout << 1;
+    }
+    else
+        cout << 0;
 }
