@@ -13,18 +13,21 @@ void dfs(int cnt, int idx)
     {
         int sum1 = 0;
         int sum2 = 0;
+        vector<int> st;
+        vector<int> lk;
         for (int i = 0; i < n; i++)
         {
-            for (int j = 0; j < n; j++)
+            if (isUsed[i])
+                st.push_back(i);
+            else
+                lk.push_back(i);
+        }
+        for (int i = 0; i < n / 2; i++)
+        {
+            for (int j = 0; j < n / 2; j++)
             {
-                if (isUsed[i] && isUsed[j])
-                {
-                    sum1 += board[i][j];
-                }
-                if (!isUsed[i] && !isUsed[j])
-                {
-                    sum2 += board[i][j];
-                }
+                sum1 += board[st[i]][st[j]];
+                sum2 += board[lk[i]][lk[j]];
             }
         }
         ans = min(abs(sum1 - sum2), ans);
