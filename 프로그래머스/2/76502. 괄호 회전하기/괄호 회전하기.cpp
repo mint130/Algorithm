@@ -1,72 +1,64 @@
 #include <string>
 #include <vector>
-#include <queue>
+#include <algorithm>
 #include <stack>
+#include <deque>
+#include <iostream>
+#include <iostream>
 using namespace std;
+int answer = 0;
+int len = 0;
 
-bool check(string s){
-    //올바른 괄호 문자열인지 체크
+bool isright(string s){
     stack<char> st;
+    
     for(int i=0;i<s.length();i++){
         if(st.empty()){
+            if(s[i]=='}' || s[i]==')' || s[i]==']') return false;
             st.push(s[i]);
         }
         else {
-            if(s[i]=='(' || s[i]=='{' || s[i]=='['){
-                if(st.top()=='(' || st.top()=='[' || st.top()=='{'){
-                    st.push(s[i]);
-                }
+            char c = st.top();
+            //cout<<c<<endl;
+            // 닫힌 괄호면 return false
+            if(c=='}' || c==')' || c==']') return false;
+            // 열린 괄호면
+            if(c=='(') {
+                if(s[i]==')') st.pop();
                 else {
-                    return false;
+                    if(s[i]=='{' || s[i]=='[' || s[i]=='(') st.push(s[i]);
+                    else return false;
                 }
             }
-            else if(s[i]==')' || s[i]=='}' || s[i]==']'){
-                if(st.top()=='{'){
-                    if(s[i]!='}') return false;
-                    else st.pop();
+            else if(c=='[') {
+                if(s[i]==']') st.pop();
+                else {
+                    if(s[i]=='{' || s[i]=='[' || s[i]=='(') st.push(s[i]);
+                    else return false;
                 }
-                else if(st.top()=='('){
-                    if(s[i]!=')') return false;
-                    else st.pop();
-                }
-                else if(st.top()=='['){
-                    if(s[i]!=']') return false;
-                    else st.pop();
+                
+            }
+            else if(c=='{'){
+                if(s[i]=='}') st.pop();
+                else {
+                    if(s[i]=='{' || s[i]=='[' || s[i]=='(') st.push(s[i]);
+                    else return false;
                 }
             }
+            // else if(s[i]=='}' && s[i]=='{') st.pop();
+            // else if(s[i]==']' && s[i]=='[') st.pop();
             
         }
     }
     if(st.empty()) return true;
     else return false;
-    
-}
-string left(string s, int num) {
-    if(num==0) return s;
-    queue<char> q;
-    for(int i=0;i<s.length();i++){
-        q.push(s[i]);
-    }
-    for(int i=1;i<=num;i++){
-        char c = q.front();
-        q.pop();
-        q.push(c);
-    }
-    string str="";
-    while(!q.empty()){
-        str+=q.front();
-        q.pop();
-    }
-    return str;
 }
 int solution(string s) {
-    int answer = 0;
-    
-    for(int i=0;i<s.length();i++){
-        //왼쪽으로 한칸씩 이동
-        if(check(left(s, i))){
-            answer++;   
-        }
+    len = s.length();
+    for(int i=0;i<len;i++){
+        string str = s.substr(0, 1);
+        s = s.substr(1, len-1)+str;
+        if(isright(s)) answer++;
     }
     return answer;
 }
