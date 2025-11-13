@@ -1,45 +1,47 @@
 #include <string>
 #include <vector>
 #include <queue>
-#include <algorithm>
 #include <iostream>
+#include <algorithm>
 using namespace std;
+bool visited[201];
+vector<int> v[201];
+int answer = 0;
+void bfs(int cur){
+    visited[cur]=1;
+    queue<int> q;
+    q.push(cur);
+    while(!q.empty()){
+        int c = q.front();
+        q.pop();
+        
+        for(auto nxt:v[c]){
+            if(!visited[nxt]){
+                visited[nxt]=1;
+                q.push(nxt);
+            }
+        }
+    }
+}
 
-vector<int> node[202];
-queue<int> q;
-bool visited[202];
 int solution(int n, vector<vector<int>> computers) {
-    int answer = 0;
+
+    
     for(int i=0;i<n;i++){
         for(int j=0;j<n;j++){
             if(i==j) continue;
-            if(computers[i][j]){
-                node[i].push_back(j);
-            }
+            if(computers[i][j]==1){
+                v[i].push_back(j);
+                v[j].push_back(i);
+            }   
+        
         }
     }
-
-    
     for(int i=0;i<n;i++){
         if(!visited[i]){
-            q.push(i);
-            visited[i]=1;
             answer++;
-            while(!q.empty()){
-                int cur=q.front();
-                q.pop();
-                for(auto nxt:node[cur]){
-                    if(!visited[nxt]){  
-                        q.push(nxt);
-                        visited[nxt]=1;
-                    }
-                }
-            }
-            
+            bfs(i);
         }
-
     }
-    
-    
     return answer;
 }
