@@ -1,26 +1,26 @@
 #include <string>
 #include <vector>
-#include <algorithm>
-#include <math.h>
-#include <queue>
 #include <iostream>
+#include <queue>
 using namespace std;
-
+priority_queue<int, vector<int>> pq;
 long long solution(int n, vector<int> works) {
     long long answer = 0;
-    priority_queue<int> pq(works.begin(), works.end());
-    while(n){
-        if(pq.empty()){
-            return 0;
-        }
-        int num=pq.top();
-        pq.pop();
-        if(num!=0) pq.push(--num);
-        n--;
+    for(auto w:works){
+        pq.push(w);
     }
-    while(!pq.empty()){
-        answer+=pq.top()*pq.top();
+    while(!pq.empty() && n>0){
+        int num = pq.top();
         pq.pop();
+        n--;
+        if(num>0) pq.push(--num);
+    }
+    if(pq.size()>0){
+        while(!pq.empty()){
+            int num = pq.top();
+            pq.pop();
+            answer+=num*num;
+        }
     }
     return answer;
 }
