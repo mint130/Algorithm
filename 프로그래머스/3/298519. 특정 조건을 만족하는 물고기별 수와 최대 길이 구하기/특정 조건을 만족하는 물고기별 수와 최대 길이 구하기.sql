@@ -1,5 +1,5 @@
-select count(*) as fish_count, max(length) as max_length, fish_type
-from fish_info
-group by fish_type
-having avg(ifnull(length, 10))>=33
-order by fish_type
+SELECT COUNT(*) AS FISH_COUNT, MAX(I.LENGTH) AS MAX_LENGTH, I.FISH_TYPE 
+FROM FISH_INFO I
+GROUP BY I.FISH_TYPE
+HAVING AVG(IFNULL(I.LENGTH, 10))>=33
+ORDER BY I.FISH_TYPE ASC
