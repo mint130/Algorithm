@@ -10,8 +10,8 @@ int solution(int n, vector<int> money) {
     
     for(int i=0;i<money.size();i++){
         int coin = money[i];
-        for(int j=1;j<=n;j++){
-            if(j>=coin) dp[j]+=(dp[j-coin]%1000000007);
+        for(int j=coin;j<=n;j++){
+            dp[j]+=(dp[j-coin]%1000000007);
         }
     }
 
