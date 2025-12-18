@@ -1,34 +1,39 @@
 #include <string>
 #include <vector>
-#include <map>
-#include <iostream>
 #include <queue>
-#include <algorithm>
+#include <map>
 using namespace std;
-map <string, int> dist;
+map<string, int> dist;
 int solution(string begin, string target, vector<string> words) {
-    //int answer = 0;
-
+    int answer = 0;
+    
     queue<string> q;
+    for(int i=0;i<words.size();i++){
+        dist[words[i]]=-1;
+    }
+    dist[begin]=0;
     q.push(begin);
     while(!q.empty()){
-        string cur=q.front();
+        string cur = q.front();
         q.pop();
-        if(cur==target){
-            return dist[cur];
-        }
+        
         for(int i=0;i<words.size();i++){
-            int cnt=0;
-            string nxt=words[i];
-            for(int j=0;j<nxt.length();j++){
-                //words가 cur과 다른 부분 찾는 cnt변수
-                if(nxt[j]!=cur[j]) cnt++;
+            string nxt = words[i];
+            if(dist[nxt]==-1){
+                // nxt가 cur이랑 한 글자 차이만 나는지
+                int cnt = 0;
+                for(int j=0;j<nxt.length();j++){
+                    if(cur[j]!=nxt[j]) {
+                        cnt++;
+                    }
+                }
+                if(cnt==1){
+                    dist[nxt]=dist[cur]+1;
+                    q.push(nxt);
+                }
             }
-            if(cnt==1 && !dist[nxt]){
-                q.push(nxt);
-                dist[nxt]=dist[cur]+1;    
-            }
+            
         }
     }
-    return 0;
+    return dist[target]==-1?0:dist[target];
 }
