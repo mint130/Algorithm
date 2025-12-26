@@ -1,46 +1,40 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <iostream>
 #include <set>
+#include <iostream>
 using namespace std;
-int num[5];
+int N;
 int answer = 0;
-void dfs(int idx, int cnt, int n, vector<vector<int>> &q, vector<int> &ans){
-    // n중에 30을 조합으로 
+void dfs(int idx, int cnt, vector<int> num, vector<vector<int>> &q, vector<int> &ans){
+    // 1부터 n까지 5개 고르는 조합
     if(cnt==5){
-        bool flag = 0;
+        // 지금 조합 num과 q를 비교해서 일치하는 갯수가 ans
         for(int i=0;i<q.size();i++){
             set<int> s;
+            // q의 i번째 리스트 들어감
             for(int j=0;j<5;j++){
-                s.insert(num[j]);
                 s.insert(q[i][j]);
+                s.insert(num[j]);
             }
-            // 겹치는 갯수
-            int cnt = 10-s.size();
-            // 응답이랑 갯수 같은지 확인
-            if(cnt!=ans[i]){
-                flag = 1;
-                break;
+           
+            if((10-s.size())!=ans[i]) {
+                // 응답이랑 갯수 같지않은 경우 return
+                return;
             }
         }
-    
-        // 입력이랑 다 일치하면 경우 증가
-        if(!flag){
-            answer++;
-        }
-
+        answer++;
         return;
     }
-    
-    for(int i=idx;i<=n;i++){
-        num[cnt]=i;
-        dfs(i+1, cnt+1, n, q, ans);
+    for(int i=idx;i<=N;i++){
+        num.push_back(i);
+        dfs(i+1, cnt+1, num, q, ans);
+        num.pop_back();
     }
 }
 int solution(int n, vector<vector<int>> q, vector<int> ans) {
-    
-    dfs(1, 0, n, q, ans);
-    
+    N = n;
+    vector<int> num;
+    dfs(1, 0, num, q, ans);
     return answer;
 }
