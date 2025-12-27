@@ -24,7 +24,7 @@ bool pass(vector<int> &stones, int k, int mid){
 }
 int solution(vector<int> stones, int k) {
     int st = 0;
-    int en = 200000000;
+    int en = *max_element(stones.begin(), stones.end());
     int mid = 0;
     while(st<=en){
         mid = (st+en)/2;
