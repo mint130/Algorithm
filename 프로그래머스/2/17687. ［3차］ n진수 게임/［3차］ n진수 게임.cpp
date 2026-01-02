@@ -23,15 +23,9 @@ string solution(int n, int t, int m, int p) {
         num++;
     }
     int idx = 0;
-    int cnt = 0;
-    while(1){
-        if(cnt==t){
-            // t개 다 채움
-            return answer;
-        }
+    while(answer.length()!=t){
         answer+=ans[idx+(p-1)]; // m개씩 건너뛰면서 p-1번째
         idx+=m; // m개씩 건너뜀
-        cnt++; // 채운 갯수
     }
     return answer;
 }
