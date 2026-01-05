@@ -1,24 +1,29 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <iostream>
 #include <queue>
+#include <iostream>
 using namespace std;
+bool used[1000001];
 
 int solution(int n, int k, vector<int> enemy) {
     int answer = 0;
-
-    priority_queue<int, vector<int>, greater<int>> pq; //오름차순 우선순위 큐
-    int i;
-    for(i=0;i<enemy.size();i++){
+    if(k>=enemy.size()) return enemy.size();
+    priority_queue<int, vector<int>, less<>> pq;
+    for(int i=0;i<enemy.size();i++){
+        n-=enemy[i];
         pq.push(enemy[i]);
-        if(pq.size()>k){
-            //무적권의 갯수보다 커지면 가장 작은 것부터 n에서 지움
-            if(pq.top()>n) return i;
-            n=n-pq.top();
-            pq.pop();
+        if(n<0){
+            if(k>0){
+                int num = pq.top();
+                n+=num;
+                pq.pop();
+                k--;
+            }
+            else {
+                return i;
+            }
         }
-        
     }
     return enemy.size();
 }
