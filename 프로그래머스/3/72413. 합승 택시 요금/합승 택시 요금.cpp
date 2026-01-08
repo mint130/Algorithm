@@ -2,47 +2,57 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include <queue>
 using namespace std;
-int dist[201][201];
-int answer = 987654321;
-int solution(int n, int s, int a, int b, vector<vector<int>> fares) {
-    for(int i=1;i<=n;i++){
-        for(int j=1;j<=n;j++){
-            dist[i][j]=987654321;
+
+vector<pair<int, int>> v[201];
+void dijkstra(int st, vector<int> &dist){
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> pq;
+    pq.push({0, st});
+    dist[st]=0;
+    while(!pq.empty()){
+        int cur = pq.top().second;
+        int cost = pq.top().first;
+        pq.pop();
+        if(dist[cur]<cost) continue;
+        for(auto nxt:v[cur]){
+            int node = nxt.second;
+            int w = nxt.first;
+            if(dist[node]>dist[cur]+w){
+                dist[node]=dist[cur]+w;
+                pq.push({dist[node], node});
+            }
         }
     }
+}
+int solution(int n, int s, int a, int b, vector<vector<int>> fares) {
+    int answer = 987654321;
     for(int i=0;i<fares.size();i++){
         int a = fares[i][0];
         int b = fares[i][1];
         int c = fares[i][2];
-        dist[a][b]=c;
-        dist[b][a]=c;
+        v[b].push_back({c, a});
+        v[a].push_back({c, b});
     }
+    vector<int> aa(n+1, 987654321);
+    // a -> 다른 노드
+    dijkstra(a, aa);
+    // b -> 다른 노드
+    vector<int> bb(n+1, 987654321);
+    dijkstra(b, bb);
+    // s -> 다른 노드
+    vector<int> ss(n+1, 987654321);
+    dijkstra(s, ss);
     
-    for(int k=1;k<=n;k++){
-        for(int i=1;i<=n;i++){
-            for(int j=1;j<=n;j++){
-                if(i==j) dist[i][j]=0;
-                else{
-                    if(dist[i][j]>dist[i][k]+dist[k][j])
-                        dist[i][j]=dist[i][k]+dist[k][j];
-                }
-                
-            }
-        }
-    }
-    
-    int aa = dist[s][a]; // 직통
-    int bb = dist[s][b];
-    answer = min({aa+bb, answer});
+    // 각각
+    answer = ss[a]+ss[b];
     for(int i=1;i<=n;i++){
-        // i가 중간지점 
-        if(s!=i && dist[s][i]!=987654321) {
-            int d = dist[s][i];
-            int aaa = dist[i][a];
-            int bbb = dist[i][b];
-            answer = min({answer, d+aaa+bbb});
-        }
+        int m = ss[i];
+        int aaa = aa[i];
+        int bbb = bb[i];
+        if(aaa==987654321 || bbb==987654321) continue;
+        answer = min({m+aaa+bbb, answer});
     }
+   
     return answer;
 }
