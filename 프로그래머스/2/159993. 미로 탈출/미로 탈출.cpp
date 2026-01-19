@@ -1,103 +1,60 @@
 #include <string>
 #include <vector>
-#include <string.h>
-#include <iostream>
 #include <queue>
-
+#include <iostream>
+#include <algorithm>
 using namespace std;
-
-int dx[4]={1,0,-1,0};
-int dy[4]={0,1,0,-1};
-char map[102][102]={0};
-int visited[102][102]={0};
-queue<pair<int, int>> q;
-int finishX, finishY;
-int leverX, leverY;
-int startX, startY;
-int N, M;
-int BFS(int firstX, int firstY, int endX, int endY){
+int board[101][101]; // 1이면 못감
+int dist[101][101];
+int dx[4]={1, 0, -1, 0};
+int dy[4]={0, 1, 0, -1};
+int ex, ey, lx, ly, sx, sy, n, m;
+int bfs(int r, int c, int r2, int c2){
     queue<pair<int, int>> q;
-    q.push({firstX, firstY});
-   
-    while(!q.empty()){
-        int x=q.front().first;
-        int y=q.front().second;
-        
-        q.pop();
-       
-        if(x==endX && y==endY){
-            
-            return visited[x][y];
-            
-        }
-        for(int i=0;i<4;i++){
-        
-            int nx=x+dx[i];
-            int ny=y+dy[i];
-            
-            if(nx>=0&&nx<N&&ny>=0&&ny<M){
-                if(map[nx][ny]!='X'){
-                    if(visited[nx][ny]==0){
-                        visited[nx][ny]=visited[x][y]+1;
-                        q.push({nx, ny});
-                    }
-                }
-            }
-           
-        }
-        
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++) dist[i][j]=-1;
     }
-    return visited[endX][endY];
-    
+    dist[r][c]=0;
+    q.push({r, c});
+    while(!q.empty()){
+        int x = q.front().first;
+        int y = q.front().second;
+        if(x==r2 && y==c2){
+            return dist[x][y];
+        }
+        q.pop();
+        for(int d=0;d<4;d++){
+            int nx=x+dx[d];
+            int ny=y+dy[d];
+            if(nx<0||nx>=n||ny<0||ny>=m) continue;
+            if(dist[nx][ny]==-1 && !board[nx][ny]) {
+                dist[nx][ny]=dist[x][y]+1;
+                q.push({nx, ny});
+            }
+        }
+    }
+    return -1;
 }
 int solution(vector<string> maps) {
-    
-    N=maps.size(); //세로 사이즈
-    M=maps[0].length();
-    for(int i=0;i<N;i++){
-        for(int j=0;j<M;j++){
-            map[i][j]=maps[i][j];
-            visited[i][j]=0;
-            if(map[i][j]=='S'){
-                //시작 지점
-                startX=i;
-                startY=j;
+    n=maps.size();
+    m=maps[0].length();
+    for(int i=0;i<maps.size();i++){
+        for(int j=0;j<maps[i].length();j++){
+            if(maps[i][j]=='X') board[i][j]=1;
+            if(maps[i][j]=='E') {
+                ex=i; ey=j;
             }
-            if(map[i][j]=='E'){
-                finishX=i;
-                finishY=j;
-                //도착 지점
+            if(maps[i][j]=='S'){
+                sx=i; sy=j;
             }
-            if(map[i][j]=='L'){
-                leverX=i;
-                leverY=j;
-                //레버 지점
+            if(maps[i][j]=='L'){
+                lx=i; ly=j;
             }
         }
     }
-    //레버를 먼저 당겨야 한다
-    int lever=BFS(startX, startY, leverX, leverY);
-   
-    if(lever==0){
-        cout<<"lever "<<lever<<endl;
-        return -1;
-        //레버를 찾을 수 없으면 return -1
-    } else {
-        //레버를 찾았다면
-        
-        memset(visited, 0, sizeof(visited));
-       
-        //방문한 배열 초기화해주기
-       
-        int exit=BFS(leverX, leverY, finishX, finishY);
-        cout<<"lever "<<lever<<" exit "<<exit<<endl;
-        if(exit==0) return -1;
-        else {
-            return lever+exit;
-        }
-       
-        
-        
-    }
+    int a = bfs(lx, ly, sx, sy);
+    int b = bfs(ex, ey, lx, ly);
     
+    if(a==-1 || b==-1) return -1;
+    else return a+b;
 }
